@@ -110,10 +110,10 @@ fun construirRegras(): List<Requisito> {
         },
 
         Requisito(
-            "A senha deve conter um palíndromo de pelo menos 3 caracteres " +
-            "(ex: 'aba', 'racecar', '121', 'ABBA')."
+            "A senha deve conter um palíndromo de pelo menos 4 caracteres " +
+            "(ex: 'abba', 'ABBA', '1221', 'racecar')."
         ) {
-            contemPalindromo(it)
+            contemPalindromo(it, tamanhoMinimo = 4)
         }
     )
 }
@@ -155,7 +155,7 @@ fun main() {
                 ✅  SENHA ACEITA PELO OVERLORD!
                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                    Senha: $entrada
-                   Comprimento: ${entrada.length} caracteres
+                   Comprimento: ${entrada.length-1} caracteres
                    Soma dos dígitos: ${somaDigitos(entrada)}
                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                 """.trimIndent()
