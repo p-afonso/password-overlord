@@ -28,16 +28,20 @@ fun toRomano(n: Int): String {
 fun somaDigitos(senha: String): Int =
     senha.filter { it.isDigit() }.sumOf { it.digitToInt() }
 
-fun contemEmoji(senha: String): Boolean {
-    val emojiRegex = Regex("[\\uD83C-\\uDBFF\\uDC00-\\uDFFF]|[\\u2600-\\u27BF]|[\\u2B00-\\u2BFF]|[\\u1F300-\\u1F9FF]")
-    return emojiRegex.containsMatchIn(senha)
-}
+fun contemEmoji(senha: String): Boolean =
+    senha.codePoints().anyMatch { cp ->
+        cp in 0x1F300..0x1FAFF ||  // Emoticons, símbolos diversos, pictogramas
+        cp in 0x2600..0x27BF  ||   // Símbolos variados (☀ ❄ ✅ etc)
+        cp in 0x2B00..0x2BFF  ||   // Setas e símbolos suplementares
+        cp in 0x1F000..0x1F02F     // Mahjong / dominó
+    }
 
 fun contemPalindromo(senha: String, tamanhoMinimo: Int = 3): Boolean {
-    for (i in senha.indices) {
-        for (j in i + tamanhoMinimo..senha.length) {
-            val sub = senha.substring(i, j)
-            if (sub == sub.reversed()) return true
+    val pts = senha.codePoints().toArray()
+    for (i in pts.indices) {
+        for (j in i + tamanhoMinimo..pts.size) {
+            val sub = pts.sliceArray(i until j)
+            if (sub.contentEquals(sub.reversedArray())) return true
         }
     }
     return false
@@ -80,7 +84,7 @@ fun construirRegras(): List<Requisito> {
         // ── Criativas ─────────────────────────────────────────
 
         Requisito(
-            "A senha deve conter o dia de hoje em algarismos romanos: '$diaRomano'."
+            "A senha deve conter o dia de hoje em algarismos romanos."
         ) {
             it.contains(diaRomano, ignoreCase = true)
         },
