@@ -99,7 +99,8 @@ fun construirRegras(): List<Requisito> {
             "A senha deve conter seu próprio comprimento como número. " +
             "Ex: se a senha tiver 42 caracteres, deve conter '42'."
         ) {
-            it.contains(it.length.toString())
+            val tamanho = it.codePointCount(0, it.length)
+            it.contains(tamanho.toString())
         },
 
         Requisito(
