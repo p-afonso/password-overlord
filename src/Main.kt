@@ -37,11 +37,17 @@ fun contemEmoji(senha: String): Boolean =
     }
 
 fun contemPalindromo(senha: String, tamanhoMinimo: Int = 3): Boolean {
-    val pts = senha.codePoints().toArray()
-    for (i in pts.indices) {
-        for (j in i + tamanhoMinimo..pts.size) {
-            val sub = pts.sliceArray(i until j)
-            if (sub.contentEquals(sub.reversedArray())) return true
+    val cps = mutableListOf<Int>()
+    var idx = 0
+    while (idx < senha.length) {
+        val cp = senha.codePointAt(idx)
+        cps.add(cp)
+        idx += Character.charCount(cp)
+    }
+    for (i in cps.indices) {
+        for (j in i + tamanhoMinimo..cps.size) {
+            val sub = cps.subList(i, j)
+            if (sub == sub.reversed()) return true
         }
     }
     return false
